@@ -5,6 +5,7 @@ const CartItems = (props) => {
   const cartCntxt = useContext(CartContext);
   const removeFromCart = (event) => {
     event.preventDefault();
+    
     cartCntxt.removeItem(props.id);
   };
   const imgsrc = props.img;

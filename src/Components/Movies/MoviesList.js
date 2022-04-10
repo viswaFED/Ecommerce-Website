@@ -1,8 +1,10 @@
+import React, { Fragment } from "react";
 import Movie from "./Movies";
 import classes from './MoviesList.module.css';
 
 const MoviesList = (props) => {
   return (
+    <Fragment>
     <ul className={classes['movies-list']}>
       {props.movies.map((movie) => (
         <Movie
@@ -14,6 +16,7 @@ const MoviesList = (props) => {
         />
       ))}
     </ul>
+    </Fragment>
   );
 };
 

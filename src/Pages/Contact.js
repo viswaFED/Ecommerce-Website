@@ -1,48 +1,66 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useRef } from "react";
 import "./Contact.css";
 const Contact = () => {
+  const nameRef = useRef("");
+  const mailRef = useRef("");
+  const phnoRef = useRef("");
+  const msgRef  =  useRef("");
+
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    const Contacts = {
+      name: nameRef.current.value,
+      email: mailRef.current.value,
+      phno: phnoRef.current.value,
+      msg:  msgRef.current.value,
+    };
+    
+    const response = await fetch(
+      "https://react-http-21f21-default-rtdb.firebaseio.com/Contacts.json",
+      {
+        method: "POST",
+        body: JSON.stringify(Contacts),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+  };
   return (
     <Fragment>
       <h1 style={{ fontFamily: "Times New Roman", textAlign: "center" }}>
         Contact us
       </h1>
-      <form className="container">
+      <form className="container" onSubmit={submitHandler}>
         <div className="form">
           <div className="formdetails">
             <label>Name</label>
-            <input
-              type="text"
-              name="firstName"
-              placeholder="Joe"
-            />
+            <input type="text" ref={nameRef} />
           </div>
           <br />
           <div className="formdetails">
             <label>Email</label>
             <input
               type="email"
-              name="email"
-              id="email"
-              placeholder="example@corp.com"
-             
+              ref={mailRef}
             />
           </div>
           <div className="formdetails">
             <label>Phone no</label>
-            <input type="number" 
-            placeholder="666666666"/>
+            <input type="number" ref={phnoRef} />
           </div>
           <div className="">
             <label className="msglabel">Message</label>
             <textarea
-              placeholder="Message"
-              name="message"
-              className="msginput"
+              className="msginput" ref={msgRef}
             ></textarea>
           </div>
-        <div >
-          <button className="Contactbutton"> submit</button>
-        </div>
+          <div>
+            <button className="Contactbutton"> submit</button>
+          </div>
         </div>
       </form>
     </Fragment>
