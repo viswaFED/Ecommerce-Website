@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+
+import React, { useState, useContext } from "react";
 import "./App.css";
 import Navbar from "./Components/NavBar/index";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Home from "./Pages/Index";
 import About from "./Pages/About";
 import Contact from "./Pages/Contact";
@@ -12,6 +14,7 @@ import Footer from "./Pages/Footer";
 import ProductPage from "./Pages/ProductPage";
 import AuthPage from "./AuthPage";
 import UserProfile from "./Profile/UserProfile";
+import AuthContext from "./AuthContext";
 
 function App() {
   const [cart, setCart] = useState(false);
@@ -22,6 +25,8 @@ function App() {
   const showCartHandler = () => {
     setCart(true);
   };
+
+  const authCtx = useContext(AuthContext);
 
   // state = {
   //   flag: false,
@@ -39,13 +44,23 @@ function App() {
       <Router>
         <Navbar Cart={showCartHandler} />
         <Routes>
-          <Route path="/Home" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact-us" element={<Contact />} />
-          <Route path="/Store" element={<Store />} />
-          <Route path="/Store/:productId" element={<ProductPage />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/Home" element={authCtx.isLoggedIn && <Home />} />
+          <Route path="/about" element={authCtx.isLoggedIn && <About />} />
+          <Route
+            path="/contact-us"
+            element={authCtx.isLoggedIn && <Contact />}
+          />
+          <Route path="/Store" element={authCtx.isLoggedIn && <Store />} />
+          <Route
+            path="/Store/:productId"
+            element={authCtx.isLoggedIn && <ProductPage />}
+          />
+          <Route path="/auth" element={!authCtx.isLoggedIn && <AuthPage />} />
+          <Route
+            path="/profile"
+            element={authCtx.isLoggedIn && <UserProfile />}
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
       {cart && <Cart onClick={hideCartHandler} />}
